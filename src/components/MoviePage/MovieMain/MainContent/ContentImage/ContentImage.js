@@ -10,7 +10,11 @@ export default function ContentImage() {
         objectFit="cover"
         w="100%"
         h="100%"
-        src={`https://image.tmdb.org/t/p/original${src}`}
+        src={
+          src
+            ? `https://image.tmdb.org/t/p/original${src}`
+            : "./assets/images/NoImage.png"
+        }
         _hover={{ opacity: "0.8" }}
       />
     </Box>

@@ -7,7 +7,11 @@ export default function ActorCard({ actor }) {
         height="200px"
         objectFit="cover"
         borderRadius="20px"
-        src={`https://image.tmdb.org/t/p/original${actor.profile_path}`}
+        src={
+          src
+            ? `https://image.tmdb.org/t/p/original${actor.profile_path}`
+            : "./assets/images/NoImage.png"
+        }
       />
       <Heading variant="h4" mt="10px">
         {actor.name}
