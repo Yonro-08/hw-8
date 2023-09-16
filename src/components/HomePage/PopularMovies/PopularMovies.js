@@ -1,35 +1,17 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Box, Container, Heading, SimpleGrid, Spinner } from "@chakra-ui/react";
-
-import { AppContext } from "../../../context/AppContext";
 
 import MovieCard from "./MovieCard/MovieCard";
 import ButtonLoadMore from "../ButtonLoadMore/ButtonLoadMore";
+import { useMovies } from "../../../store/useMovies";
 
 export default function PopularMovies() {
-  const { dispatch, movies } = useContext(AppContext);
-  const [page, setPage] = useState(1);
+  const { movies, pushMovies } = useMovies();
+  const [page, setPage] = useState(2);
   const [spinning, setSpinning] = useState(false);
 
-  const getFetch = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/discover/movie?api_key=e3308cd5b9f367afd8512d59039cc6fe&page=${page}`
-    );
-    const data = await response.json();
-    return data.results;
-  };
-
   useEffect(() => {
-    const saveMovies = async () => {
-      setSpinning(true);
-      const newMovies = await getFetch();
-      dispatch({
-        type: "GET_DATA_POPULAR_MOVIES",
-        payload: newMovies,
-      });
-      setSpinning(false);
-    };
-    saveMovies();
+    pushMovies(page, setSpinning);
   }, [page]);
 
   return (
@@ -51,7 +33,9 @@ export default function PopularMovies() {
               );
             })
           ) : (
-            <Spinner></Spinner>
+            <Box>
+              <Spinner></Spinner>
+            </Box>
           )}
         </SimpleGrid>
         <ButtonLoadMore setPage={setPage} page={page} spinning={spinning} />

@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import {
   InputGroup,
   InputLeftElement,
@@ -8,25 +8,16 @@ import {
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
 
-import { AppContext } from "../../../context/AppContext";
+import { useSearchMovies } from "../../../store/useSearchMovies";
 
 export default function SearchMovie() {
-  const { dispatch, searchValue } = useContext(AppContext);
+  const { searchValue, changeSearchValue, getSearchMovies } = useSearchMovies();
   const [inputValue, setInputValue] = useState(searchValue);
 
-  const getFetchSearchMovies = async (event) => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${event.target.value}&api_key=e3308cd5b9f367afd8512d59039cc6fe&page=1`
-    );
-    const data = await response.json();
-    return data.results;
-  };
-
-  const onAddSearchValue = async (event) => {
+  const onChangeSearchValue = (event) => {
     setInputValue(event.target.value);
-    const newMovies = await getFetchSearchMovies(event);
-    dispatch({ type: "ADD_SEARCH_VALUE", payload: event.target.value });
-    dispatch({ type: "ADD_SEARCH_MOVIES", payload: newMovies });
+    changeSearchValue(event.target.value);
+    getSearchMovies(event.target.value);
   };
 
   return (
@@ -38,7 +29,7 @@ export default function SearchMovie() {
           </InputLeftElement>
           <Input
             value={inputValue}
-            onChange={onAddSearchValue}
+            onChange={onChangeSearchValue}
             variant="unstyled"
             height="40px"
             paddingLeft="60px"

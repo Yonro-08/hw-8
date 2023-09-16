@@ -1,32 +1,17 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Box, Container, Heading, SimpleGrid } from "@chakra-ui/react";
-
-import { AppContext } from "../../../context/AppContext";
 
 import MovieCard from "../PopularMovies/MovieCard/MovieCard";
 import ButtonLoadMore from "../ButtonLoadMore/ButtonLoadMore";
+import { useSearchMovies } from "../../../store/useSearchMovies";
 
 export default function SearchMovies() {
-  const { dispatch, searchMovies, searchValue } = useContext(AppContext);
+  const { searchMovies, pushSearchMovies } = useSearchMovies();
   const [page, setPage] = useState(2);
   const [spinning, setSpinning] = useState(false);
 
-  const getFetch = async () => {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/search/movie?query=${searchValue}&api_key=e3308cd5b9f367afd8512d59039cc6fe&page=${page}`
-    );
-    const data = await response.json();
-    return data.results;
-  };
-
   const getData = async () => {
-    setSpinning(true);
-    const newMovies = await getFetch();
-    dispatch({
-      type: "CHANGE_PAGE_SEARCH_MOVIES",
-      payload: newMovies,
-    });
-    setSpinning(false);
+    pushSearchMovies(page, setSpinning);
   };
 
   return (

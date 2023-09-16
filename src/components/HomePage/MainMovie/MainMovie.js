@@ -4,8 +4,11 @@ import {
   MainMovieSectionStyle,
   blackoutBackground,
 } from "../../../defaultStyle";
+import { useMovies } from "../../../store/useMovies";
 
-export default function MainMovie({ movie }) {
+export default function MainMovie() {
+  const movie = useMovies((state) => state.movies[0]);
+
   return (
     <>
       {movie ? (
