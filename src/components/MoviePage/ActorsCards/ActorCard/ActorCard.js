@@ -8,7 +8,7 @@ export default function ActorCard({ actor }) {
         objectFit="cover"
         borderRadius="20px"
         src={
-          src
+          actor.profile_path
             ? `https://image.tmdb.org/t/p/original${actor.profile_path}`
             : "./assets/images/NoImage.png"
         }
